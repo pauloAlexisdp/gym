@@ -49,7 +49,7 @@ model Exercise {
   muscle Muscle
   muscleGroup MuscleGroup
   description String
-  videoTutorial String @default("")
+  videoTutorial? String @default("")
   isActive Boolean @default(true)
   userExercises UserExercise[] 
 }
@@ -58,8 +58,8 @@ model UserExercise {
   id  Int @id @default(autoincrement())
   userId Int
   exerciseId Int
-  reps Int
-  weight Float
+  reps Int @default(0)
+  weight Float?
   user User @relation(fields: [userId], references: [id])
   exercise Exercise @relation(fields: [exerciseId], references: [id])
   history UserExerciseHistory[]
