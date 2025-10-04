@@ -4,20 +4,19 @@ import { computed } from 'vue'
 
 const route = useRoute()
 
-// Determinar si estamos en páginas de autenticación (login o register)
-const isAuthPage = computed(() => route.path === '/login' || route.path === '/register')
+const isAuthPage = computed(() => route.path === '/iniciar-sesion' || route.path === '/registrarse')
 </script>
 
 <template>
-  <!-- Layout para páginas de autenticación (sin navbar ni contenedor principal) -->
+
   <div v-if="isAuthPage" class="min-h-screen">
+    <NavbarSection />
     <RouterView />
   </div>
 
-  <!-- Layout normal para otras páginas -->
+
   <div v-else class="min-h-screen">
+    <NavbarSection />
     <RouterView />
   </div>
 </template>
-
-<!-- Estilos manejados por Tailwind CSS -->
