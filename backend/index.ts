@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 
 import config from './src/config/env';
@@ -7,6 +8,10 @@ import routes from './src/routes/index.routes';
 const app = express();
 
 // Middleware globales
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
