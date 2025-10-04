@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import { computed } from 'vue'
+import NavbarSection from '@/components/common/NavbarSection.vue'
+import AuthContainer from '@/components/auth/AuthContainer.vue'
 
 const route = useRoute()
 
@@ -8,15 +10,14 @@ const isAuthPage = computed(() => route.path === '/iniciar-sesion' || route.path
 </script>
 
 <template>
-
-  <div v-if="isAuthPage" class="min-h-screen">
+  <div class="min-h-screen">
     <NavbarSection />
-    <RouterView />
-  </div>
+
+    <div v-if="isAuthPage">
+      <AuthContainer />
+    </div>
 
 
-  <div v-else class="min-h-screen">
-    <NavbarSection />
-    <RouterView />
+    <RouterView v-else />
   </div>
 </template>

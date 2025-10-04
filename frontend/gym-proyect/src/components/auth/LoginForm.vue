@@ -1,12 +1,10 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <GymNavbar />
-
-    <div class="flex items-center justify-center min-h-[calc(100vh-4rem)] px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
       <div class="bg-white rounded-lg shadow-xl w-full max-w-md sm:max-w-lg">
         <div class="px-4 py-6 sm:px-8 sm:py-8">
 
-          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 text-center font-black uppercase tracking-tight leading-none transform scale-x-95">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 text-center font-black tracking-tight leading-none transform scale-x-95">
             ¡Bienvenido!
           </h2>
 
@@ -65,12 +63,12 @@
           <div class="mt-4 sm:mt-6 text-center">
             <p class="text-sm sm:text-base text-gray-600">
               ¿No tienes cuenta?
-              <router-link
-                to="/registrarse"
-                class="text-black font-semibold hover:underline ml-1"
+              <button
+                @click="$emit('switch-to-register')"
+                class="text-green-600 font-semibold hover:underline ml-1 cursor-pointer"
               >
                 Regístrate aquí
-              </router-link>
+              </button>
             </p>
           </div>
         </div>
@@ -83,9 +81,13 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService, type LoginData } from '@/services/auth.service'
-import GymNavbar from '@/components/common/NavbarSection.vue'
 
 const router = useRouter()
+
+// Definir los emits
+defineEmits<{
+  'switch-to-register': []
+}>()
 
 const formData = ref<LoginData>({
   email: '',

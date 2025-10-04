@@ -1,8 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <GymNavbar />
-
-    <div class="flex items-center justify-center min-h-[calc(100vh-6rem)] px-4">
+    <div class="flex items-center justify-center min-h-screen px-4">
       <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Registrarse</h2>
 
@@ -71,6 +69,18 @@
         <div v-if="showError" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
           {{ errorMessage }}
         </div>
+
+        <div class="mt-4 text-center">
+          <p class="text-sm text-gray-600">
+            ¿Ya tienes cuenta?
+            <button
+              @click="$emit('switch-to-login')"
+              class="text-green-600 font-semibold hover:underline ml-1 cursor-pointer"
+            >
+              Inicia sesión aquí
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -80,9 +90,12 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService, type RegisterData } from '@/services/auth.service'
-import GymNavbar from '@/components/common/NavbarSection.vue'
 
 const router = useRouter()
+
+defineEmits<{
+  'switch-to-login': []
+}>()
 
 const formData = ref<RegisterData>({
   name: '',
@@ -106,9 +119,9 @@ const handleSubmit = async (): Promise<void> => {
 
     if (result.success) {
       showSuccess.value = true
-      // Redirigir a login después de 2 segundos
+
       setTimeout(() => {
-        router.push('/login')
+        router.push('/iniciar-sesion')
       }, 2000)
     } else {
       errorMessage.value = result.message
