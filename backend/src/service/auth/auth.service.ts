@@ -1,25 +1,24 @@
 import jwt from "jsonwebtoken";
 
-import { hash, compare } from "./password.service";
-import config from "../config/env";
-import errors from "../errors/auth.messages";
-import { httpError } from "../helpers/httpError";
+import type { JWTClaims, LoginServiceResponse, RegisterServiceResponse } from "./auth.types";
+import config from "../../config/env";
+import errors from "../../errors/auth.messages";
+import { httpError } from "../../helpers/httpError";
 import type {
   CreateUserRequest,
-  CreateUserSafeResponse,
   LoginRequest,
-  LoginResponse,
-} from "../interfaces/auth.interface";
-import { createUser, findByEmail } from "../models/user.model";
+} from "../../interfaces/auth.interface";
+import { createUser, findByEmail } from "../../models/user/user.model";
+import { hash, compare } from "../password.service";
 
 function normalizeEmail(e: string): string {
   return e.trim().toLowerCase();
 }
 
-export async function register(args: CreateUserRequest): Promise<CreateUserSafeResponse> {
-  const email = normalizeEmail(args.email);
+export async function register(args: CreateUserRequest): Promise<RegisterServiceResponse> {
+  const normalizedEmail = normalizeEmail(args.email);
 
-  const exists = await findByEmail(email);
+  const exists = await findByEmail(normalizedEmail);
   if (exists) throw httpError(409, errors.service.email_in_use);
 
   const hashed = await hash(args.password);
@@ -27,7 +26,7 @@ export async function register(args: CreateUserRequest): Promise<CreateUserSafeR
   const user = await createUser({
     name: args.name.trim(),
     lastname: args.lastname.trim(),
-    email,
+    email: normalizedEmail,
     password: hashed,
   });
 
@@ -41,16 +40,16 @@ export async function register(args: CreateUserRequest): Promise<CreateUserSafeR
   };
 }
 
-export async function login(args: LoginRequest): Promise<LoginResponse> {
-  const email = normalizeEmail(args.email);
-  const user = await findByEmail(email);
+export async function login(args: LoginRequest): Promise<LoginServiceResponse> {
+  const normalizedEmail = normalizeEmail(args.email);
+  const user = await findByEmail(normalizedEmail);
   if (!user) throw httpError(400, errors.service.invalid_credentials);
   if (!user.isActive) throw httpError(403, errors.service.inactive_user);
 
   const ok = await compare(args.password, user.password);
   if (!ok) throw httpError(400, errors.service.invalid_credentials);
 
-  const payload = {
+  const payload: JWTClaims = {
     sub: user.id,
     email: user.email,
     role: user.role,

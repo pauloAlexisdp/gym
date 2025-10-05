@@ -1,5 +1,5 @@
-import prisma from "../config/prisma";
-import type { CreateUserRequest, CreateUserResponse } from "../interfaces/auth.interface";
+import prisma from "../../config/prisma";
+import type { CreateUserRequest, CreateUserResponse } from "../../interfaces/auth.interface";
 
 export async function createUser(data: CreateUserRequest): Promise<CreateUserResponse> {
   return prisma.user.create({ data });
