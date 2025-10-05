@@ -1,41 +1,50 @@
-import cors from 'cors';
-import express from 'express';
+import cors from "cors";
+import express from "express";
 
-import config from './src/config/env';
-import type { HttpError } from './src/helpers/httpError';
-import routes from './src/routes/index.routes';
+import config from "./src/config/env";
+import type { HttpError } from "./src/helpers/httpError";
+import routes from "./src/routes/index.routes";
 
 const app = express();
 
 // Middleware globales
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:5174"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Rutas
-app.use('/api', routes);
+app.use("/api", routes);
 
 // Ruta de health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' });
+app.get("/health", (req, res) => {
+  res.json({ status: "OK", message: "Server is running" });
 });
 
 // Manejo de errores global
-app.use((err: HttpError | Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  const status = 'status' in err ? err.status : 500;
-  const message = err.message || 'Internal Server Error';
+app.use(
+  (
+    err: HttpError | Error,
+    req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction,
+  ) => {
+    const status = "status" in err ? err.status : 500;
+    const message = err.message || "Internal Server Error";
 
-  res.status(status).json({
-    error: {
-      status,
-      message,
-      timestamp: new Date().toISOString(),
-    },
-  });
-});
+    res.status(status).json({
+      error: {
+        status,
+        message,
+        timestamp: new Date().toISOString(),
+      },
+    });
+  },
+);
 
 // Manejo de rutas no encontradas
 app.use((req, res) => {

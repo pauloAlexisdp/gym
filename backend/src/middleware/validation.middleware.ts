@@ -1,7 +1,7 @@
-import type { Request, Response, NextFunction } from 'express';
-import type Joi from 'joi';
+import type { Request, Response, NextFunction } from "express";
+import type Joi from "joi";
 
-import { httpError } from '../helpers/httpError';
+import { httpError } from "../helpers/httpError";
 
 export function validateSchema(schema: Joi.ObjectSchema) {
   return (req: Request, res: Response, next: NextFunction): void => {
@@ -14,8 +14,8 @@ export function validateSchema(schema: Joi.ObjectSchema) {
 
       if (error) {
         const message = error.details?.length
-          ? error.details.map((detail) => detail.message).join(', ')
-          : error.message || 'Validation error';
+          ? error.details.map((detail) => detail.message).join(", ")
+          : error.message || "Validation error";
         return next(httpError(400, message));
       }
 

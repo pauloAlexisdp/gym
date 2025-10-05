@@ -9,9 +9,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "esnext",
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -39,8 +37,5 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": [
-    "src/**/*.ts",
-    "prisma/**/*.ts"
-  ]
+  "include": ["src/**/*.ts", "prisma/**/*.ts"]
 }

@@ -1,11 +1,16 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
-import { hash, compare } from './password.service';
-import config from '../config/env';
+import { hash, compare } from "./password.service";
+import config from "../config/env";
 import errors from "../errors/auth.messages";
-import { httpError } from '../helpers/httpError';
-import type { CreateUserRequest, CreateUserSafeResponse, LoginRequest, LoginResponse } from '../interfaces/auth.interface';
-import { createUser, findByEmail } from '../models/user.model';
+import { httpError } from "../helpers/httpError";
+import type {
+  CreateUserRequest,
+  CreateUserSafeResponse,
+  LoginRequest,
+  LoginResponse,
+} from "../interfaces/auth.interface";
+import { createUser, findByEmail } from "../models/user.model";
 
 function normalizeEmail(e: string): string {
   return e.trim().toLowerCase();
@@ -36,8 +41,7 @@ export async function register(args: CreateUserRequest): Promise<CreateUserSafeR
   };
 }
 
-
-export async function login(args:LoginRequest): Promise<LoginResponse> {
+export async function login(args: LoginRequest): Promise<LoginResponse> {
   const email = normalizeEmail(args.email);
   const user = await findByEmail(email);
   if (!user) throw httpError(400, errors.service.invalid_credentials);
@@ -54,7 +58,7 @@ export async function login(args:LoginRequest): Promise<LoginResponse> {
     lastname: user.lastname,
   };
 
-  const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '1d' });
+  const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1d" });
 
   return {
     token,

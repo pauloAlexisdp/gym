@@ -1,4 +1,4 @@
-import type { User } from '@prisma/client';
+import type { User } from "@prisma/client";
 
 export interface CreateUserRequest {
   name: string;
@@ -9,7 +9,7 @@ export interface CreateUserRequest {
 
 export type CreateUserResponse = User;
 
-export type CreateUserSafeResponse = Omit<User, 'password'>;
+export type CreateUserSafeResponse = Omit<User, "password">;
 
 export interface LoginRequest {
   email: string;
