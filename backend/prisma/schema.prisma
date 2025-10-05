@@ -75,3 +75,35 @@ model UserExerciseHistory {
   date DateTime @default(now())
   userExercise UserExercise @relation(fields: [userExerciseId], references: [id])
 }
+
+// Home schemas
+
+model Section {
+  id Int @id @default(autoincrement())
+  name String
+  title String
+  subtitle String?
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Media {
+  id Int @id @default(autoincrement())
+  filename String
+  filePath String
+  altText String @default('image alt')
+  createdAt DateTime @default(now())
+  activity Activity?
+}
+
+model Activity {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  mediaId Int?
+  media Media? @relation(fields: [mediaId], references: [id])
+  orderIndex Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
