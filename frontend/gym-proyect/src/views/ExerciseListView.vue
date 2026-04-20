@@ -102,9 +102,10 @@ onMounted(async () => {
 
 function onExerciseUpdated(payload: { reps: number; weight: number }) {
   if (!selectedExercise.value) return
-  selectedExercise.value.reps = payload.reps
-  selectedExercise.value.weight = payload.weight
-  const idx = exercises.value.findIndex(e => e.id === selectedExercise.value!.id)
+  const current = selectedExercise.value
+  current.reps = payload.reps
+  current.weight = payload.weight
+  const idx = exercises.value.findIndex(e => e.id === current.id)
   if (idx !== -1) {
     exercises.value[idx].reps = payload.reps
     exercises.value[idx].weight = payload.weight

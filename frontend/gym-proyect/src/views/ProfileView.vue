@@ -190,8 +190,8 @@ onMounted(async () => {
   }
   if (weightRes.ok) {
     weightHistory.value = await weightRes.json()
-    if (weightHistory.value.length > 0)
-      newWeight.value = weightHistory.value[weightHistory.value.length - 1].weight
+    const last = weightHistory.value[weightHistory.value.length - 1]
+    if (last) newWeight.value = last.weight
   }
   loadingWeight.value = false
 })

@@ -82,6 +82,7 @@ const chartOptions = computed(() => ({
         title: (items: any[]) => items[0].label,
         label: (item: any) => {
           const entry = history.value[item.dataIndex]
+          if (!entry) return []
           return [`${entry.weight} kg`, `${entry.reps} repeticiones`]
         }
       }
