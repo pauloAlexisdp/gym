@@ -7,7 +7,7 @@
         class="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 mr-2 sm:mr-3 rounded-full object-cover"
       />
       <h1 class="text-white text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold">
-        Sr Power Gym
+        SR Power Gym
       </h1>
     </div>
 
