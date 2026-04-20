@@ -107,8 +107,11 @@ function onExerciseUpdated(payload: { reps: number; weight: number }) {
   current.weight = payload.weight
   const idx = exercises.value.findIndex(e => e.id === current.id)
   if (idx !== -1) {
-    exercises.value[idx].reps = payload.reps
-    exercises.value[idx].weight = payload.weight
+    const ex = exercises.value[idx]
+    if (ex) {
+      ex.reps = payload.reps
+      ex.weight = payload.weight
+    }
   }
 }
 </script>
