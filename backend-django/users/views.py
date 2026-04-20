@@ -1,3 +1,5 @@
+import os
+
 import resend
 from django.conf import settings
 from django.utils.timezone import localtime
@@ -93,7 +95,8 @@ class ForgotPasswordView(APIView):
             return Response({'message': 'Si el email existe, recibirás un enlace de recuperación.'})
 
         reset_token = PasswordResetToken.objects.create(user=user)
-        reset_url = f'http://localhost:5173/reset-password?token={reset_token.token}'
+        frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+        reset_url = f'{frontend_url}/reset-password?token={reset_token.token}'
 
         resend.api_key = settings.RESEND_API_KEY
         resend.Emails.send({
