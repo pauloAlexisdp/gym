@@ -22,3 +22,6 @@ media/
 # Frontend
 frontend/gym-proyect/node_modules/
 frontend/gym-proyect/dist/
+
+# Old Node backend
+backend/
