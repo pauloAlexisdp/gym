@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-container">
+  <div class="auth-container bg-gray-100 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8">
     <Transition name="form-slide" mode="out-in">
       <LoginForm v-if="route.path === '/iniciar-sesion'" key="login" @switch-to-register="switchToRegister" />
       <RegisterForm v-else key="register" @switch-to-login="switchToLogin" />
@@ -27,7 +27,45 @@ const switchToLogin = () => {
 <style scoped>
 .auth-container {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  min-height: calc(100vh - 4rem); /* 4rem = h-16 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cuando el contenido es más alto que la pantalla, cambiar a items-start */
+@media (max-height: 600px) {
+  .auth-container {
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .auth-container {
+    min-height: calc(100vh - 5rem); /* 5rem = h-20 */
+  }
+
+  @media (max-height: 700px) {
+    .auth-container {
+      align-items: flex-start;
+      padding-top: 2rem;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .auth-container {
+    min-height: calc(100vh - 6rem); /* 6rem = h-24 */
+  }
+
+  @media (max-height: 800px) {
+    .auth-container {
+      align-items: flex-start;
+      padding-top: 2rem;
+    }
+  }
 }
 
 .form-slide-enter-active,

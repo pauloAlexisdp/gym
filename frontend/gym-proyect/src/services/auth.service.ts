@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3005/api'
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`
 
 export interface RegisterData {
   name: string
@@ -21,7 +21,7 @@ export interface AuthResponse {
 export const authService = {
   async register(data: RegisterData): Promise<AuthResponse> {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/auth/register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export const authService = {
 
   async login(data: LoginData): Promise<AuthResponse> {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/auth/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

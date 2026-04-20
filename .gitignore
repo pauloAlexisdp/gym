@@ -1,9 +1,24 @@
 node_modules
-# Keep environment variables out of version control
 .env
 .DS_Store
 dist/
 build/
 Thumbs.db
-
 /src/generated/prisma
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Django
+db.sqlite3
+staticfiles/
+media/
+
+# Frontend
+frontend/gym-proyect/node_modules/
+frontend/gym-proyect/dist/

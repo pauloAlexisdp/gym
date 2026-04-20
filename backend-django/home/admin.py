@@ -1,0 +1,20 @@
+from django.contrib import admin
+from .models import Activity, HomePageConfig
+
+
+@admin.register(HomePageConfig)
+class HomePageConfigAdmin(admin.ModelAdmin):
+    fields = ('hero_title', 'about_title', 'about_description', 'activities_title')
+
+    def has_add_permission(self, request):
+        return not HomePageConfig.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(Activity)
+class ActivityAdmin(admin.ModelAdmin):
+    list_display = ('title', 'order')
+    list_editable = ('order',)
+    ordering = ('order',)
