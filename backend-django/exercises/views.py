@@ -203,7 +203,11 @@ class RoutineExerciseView(APIView):
             'id': re.id,
             'order': re.order,
             'user_exercise_id': user_exercise.id,
+            'exercise_id': user_exercise.exercise.id,
             'name': user_exercise.exercise.name,
+            'muscle': user_exercise.exercise.muscle,
+            'description': user_exercise.exercise.description,
+            'video_tutorial': user_exercise.exercise.video_tutorial,
             'reps': user_exercise.reps,
             'weight': user_exercise.weight,
         }, status=status.HTTP_201_CREATED)

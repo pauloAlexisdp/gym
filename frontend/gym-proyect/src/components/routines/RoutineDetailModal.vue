@@ -131,14 +131,17 @@
       </div>
     </div>
 
-    <!-- Exercise detail modal -->
+  </div>
+
+  <!-- Exercise detail modal — teleported to body to avoid z-index issues -->
+  <Teleport to="body">
     <ExerciseDetailModal
       v-if="selectedExercise"
       :exercise="toExercise(selectedExercise)"
       @close="selectedExercise = null"
       @updated="onExerciseUpdated"
     />
-  </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
