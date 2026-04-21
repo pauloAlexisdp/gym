@@ -129,6 +129,8 @@ class RoutineListCreateView(APIView):
                     'exercise_id': re.exercise.exercise.id,
                     'name': re.exercise.exercise.name,
                     'muscle': re.exercise.exercise.muscle,
+                    'description': re.exercise.exercise.description,
+                    'video_tutorial': re.exercise.exercise.video_tutorial,
                     'reps': re.exercise.reps,
                     'weight': re.exercise.weight,
                 }

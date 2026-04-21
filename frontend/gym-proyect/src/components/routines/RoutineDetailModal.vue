@@ -51,28 +51,31 @@
           Sin ejercicios. Agrega uno.
         </div>
 
-        <div
-          v-else
-          class="space-y-2"
-          @dragover.prevent
-          @drop="onDrop"
-        >
+        <div v-else class="space-y-2" @dragover.prevent @drop="onDrop">
           <div
             v-for="ex in exercises"
             :key="ex.id"
-            draggable="true"
-            @dragstart="onDragStart(ex)"
-            @dragenter.prevent="onDragEnter(ex)"
-            class="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-3 cursor-grab active:cursor-grabbing select-none"
+            class="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-3"
             :class="dragOverId === ex.id ? 'ring-2 ring-black' : ''"
+            @dragenter.prevent="onDragEnter(ex)"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-            </svg>
-            <div class="flex-1 min-w-0">
+            <!-- Handle de arrastre -->
+            <div
+              draggable="true"
+              @dragstart="onDragStart(ex)"
+              class="cursor-grab active:cursor-grabbing shrink-0 p-1 -m-1"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+              </svg>
+            </div>
+
+            <!-- Info clickeable -->
+            <div class="flex-1 min-w-0 cursor-pointer" @click="selectedExercise = ex">
               <p class="text-sm font-medium text-gray-800 truncate">{{ ex.name }}</p>
               <p class="text-xs text-gray-400">{{ ex.reps }} reps · {{ ex.weight ?? 0 }} kg</p>
             </div>
+
             <button @click="removeExercise(ex)" class="text-gray-300 hover:text-red-400 transition-colors shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -127,6 +130,14 @@
         </div>
       </div>
     </div>
+
+    <!-- Exercise detail modal -->
+    <ExerciseDetailModal
+      v-if="selectedExercise"
+      :exercise="toExercise(selectedExercise)"
+      @close="selectedExercise = null"
+      @updated="onExerciseUpdated"
+    />
   </div>
 </template>
 
@@ -134,6 +145,8 @@
 import { ref, computed } from 'vue'
 import { useApi } from '@/composables/useApi'
 import type { Routine, RoutineExercise } from '@/views/RoutinesView.vue'
+import type { Exercise } from '@/views/ExerciseListView.vue'
+import ExerciseDetailModal from '@/components/exercises/ExerciseDetailModal.vue'
 
 const props = defineProps<{ routine: Routine }>()
 const emit = defineEmits<{
@@ -151,6 +164,7 @@ const showAddExercise = ref(false)
 const exerciseSearch = ref('')
 const dragItem = ref<RoutineExercise | null>(null)
 const dragOverId = ref<number | null>(null)
+const selectedExercise = ref<RoutineExercise | null>(null)
 
 interface UserExerciseOption {
   id: number
@@ -169,11 +183,35 @@ const filteredUserExercises = computed(() => {
   )
 })
 
+function toExercise(re: RoutineExercise): Exercise {
+  return {
+    id: re.exercise_id,
+    user_exercise_id: re.user_exercise_id,
+    name: re.name,
+    description: re.description,
+    muscle: re.muscle,
+    video_tutorial: re.video_tutorial,
+    reps: re.reps,
+    weight: re.weight,
+  }
+}
+
+function onExerciseUpdated(payload: { reps: number; weight: number }) {
+  if (!selectedExercise.value) return
+  const idx = exercises.value.findIndex(e => e.id === selectedExercise.value!.id)
+  if (idx !== -1) {
+    const ex = exercises.value[idx]
+    if (ex) {
+      ex.reps = payload.reps
+      ex.weight = payload.weight
+    }
+  }
+  emitUpdated()
+}
+
 async function loadUserExercises() {
   showAddExercise.value = true
   if (userExercises.value.length > 0) return
-  const data = await apiFetch(`${import.meta.env.VITE_API_URL}/api/exercises/routines/${props.routine.id}/`)
-  // Fetch all user exercises via a general endpoint
   const all = await apiFetch(`${import.meta.env.VITE_API_URL}/api/exercises/user-exercises/`)
   if (all) userExercises.value = all
 }
@@ -229,7 +267,7 @@ async function onDrop() {
   if (!dragItem.value || dragOverId.value === null) return
   const from = exercises.value.findIndex(e => e.id === dragItem.value!.id)
   const to = exercises.value.findIndex(e => e.id === dragOverId.value)
-  if (from === to) return
+  if (from === to) { dragItem.value = null; dragOverId.value = null; return }
 
   const reordered = [...exercises.value]
   const [item] = reordered.splice(from, 1)

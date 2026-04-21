@@ -102,6 +102,8 @@ export interface RoutineExercise {
   exercise_id: number
   name: string
   muscle: string
+  description: string
+  video_tutorial: string | null
   reps: number
   weight: number | null
 }
