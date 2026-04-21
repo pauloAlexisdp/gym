@@ -14,6 +14,14 @@ class Muscle(models.TextChoices):
     ABDOMINALES = 'ABDOMINALES', 'Abdominales'
     GASTROCNEMIO = 'GASTROCNEMIO', 'Gastrocnemio'
 
+class Days(models.TextChoices):
+    LUNES = 'LUNES', 'Lunes'
+    MARTES = 'MARTES', 'Martes'
+    MIERCOLES = 'MIERCOLES', 'Miércoles'
+    JUEVES = 'JUEVES', 'Jueves'
+    VIERNES = 'VIERNES', 'Viernes'
+    SABADO = 'SABADO', 'Sábado'
+
 
 class MuscleGroup(models.TextChoices):
     PECHO_HOMBRO = 'PECHO_HOMBRO', 'Pecho y Hombro'
@@ -64,3 +72,23 @@ class UserExerciseHistory(models.Model):
 
     class Meta:
         db_table = 'user_exercise_history'
+
+
+class Routine(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='routines')
+    name = models.CharField(max_length=255)
+    day  = models.CharField(max_length=20, choices=Days.choices)
+
+    class Meta:
+        db_table = 'routines'
+
+
+class RoutineExercise(models.Model):
+    routine  = models.ForeignKey(Routine, on_delete=models.CASCADE, related_name='routine_exercises')
+    exercise = models.ForeignKey(UserExercise, on_delete=models.CASCADE, related_name='routine_exercises')
+    order    = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'routine_exercises'
+        ordering = ['order']
+        unique_together = ('routine', 'exercise')

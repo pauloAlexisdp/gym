@@ -11,9 +11,31 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/home-user',
-      name: 'home-user',
+      path: '/inicio',
+      name: 'inicio',
       component: () => import('../views/HomeUserView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/home-user',
+      redirect: '/inicio',
+    },
+    {
+      path: '/rutinas',
+      name: 'rutinas',
+      component: () => import('../views/RoutinesView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/planes',
+      name: 'planes',
+      component: () => import('../views/PlansView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/contactenos',
+      name: 'contactenos',
+      component: () => import('../views/ContactView.vue'),
       meta: { requiresAuth: true },
     },
     {
