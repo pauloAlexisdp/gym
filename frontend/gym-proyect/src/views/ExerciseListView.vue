@@ -1,18 +1,18 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
+  <div class="h-screen flex flex-col bg-gray-100">
     <NavbarSection />
 
-    <main class="px-4 py-8 sm:px-8 max-w-2xl mx-auto">
-      <button @click="router.back()" class="flex items-center text-gray-500 hover:text-gray-800 mb-6 transition-colors">
+    <div class="flex-1 overflow-hidden flex flex-col px-4 pt-8 pb-4 sm:px-8 max-w-2xl mx-auto w-full">
+      <button @click="router.back()" class="flex items-center text-gray-500 hover:text-gray-800 mb-6 transition-colors shrink-0">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
         Volver
       </button>
 
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">{{ groupName }}</h2>
+      <h2 class="text-2xl font-bold text-gray-800 mb-4 shrink-0">{{ groupName }}</h2>
 
-      <div v-if="!loading" class="relative mb-4">
+      <div v-if="!loading" class="relative mb-4 shrink-0">
         <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z" />
         </svg>
@@ -24,15 +24,15 @@
         />
       </div>
 
-      <div v-if="loading" class="flex justify-center py-12">
+      <div v-if="loading" class="flex justify-center py-12 shrink-0">
         <span class="text-gray-400">Cargando...</span>
       </div>
 
-      <div v-else-if="filteredExercises.length === 0" class="text-center py-12 text-gray-400">
+      <div v-else-if="filteredExercises.length === 0" class="text-center py-12 text-gray-400 shrink-0">
         {{ search ? 'Sin resultados para "' + search + '"' : 'No hay ejercicios en este grupo.' }}
       </div>
 
-      <ul v-else class="space-y-3">
+      <ul v-else class="space-y-3 overflow-y-auto flex-1 pr-1">
         <li
           v-for="exercise in filteredExercises"
           :key="exercise.id"
@@ -42,7 +42,7 @@
           {{ exercise.name }}
         </li>
       </ul>
-    </main>
+    </div>
 
     <ExerciseDetailModal
       v-if="selectedExercise"

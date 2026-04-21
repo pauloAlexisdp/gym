@@ -47,12 +47,12 @@
       </div>
 
       <!-- VISTA: lista de ejercicios -->
-      <div v-if="!selectedExercise" class="flex-1 overflow-y-auto px-5 py-3">
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Ejercicios</p>
+      <div v-if="!selectedExercise" class="flex-1 overflow-hidden flex flex-col px-5 py-3">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3 shrink-0">Ejercicios</p>
 
-        <div v-if="exercises.length === 0" class="text-center py-6 text-gray-400 text-sm">Sin ejercicios. Agrega uno.</div>
+        <div v-if="exercises.length === 0" class="text-center py-6 text-gray-400 text-sm shrink-0">Sin ejercicios. Agrega uno.</div>
 
-        <div v-else class="space-y-2" @dragover.prevent @drop="onDrop">
+        <div v-else class="space-y-2 overflow-y-auto flex-1 pr-1 mb-3" @dragover.prevent @drop="onDrop">
           <div
             v-for="ex in exercises"
             :key="ex.id"
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Agregar ejercicio -->
-        <div class="mt-4">
+        <div class="shrink-0">
           <button v-if="!showAddExercise" @click="loadUserExercises" class="w-full py-2.5 rounded-xl border-2 border-dashed border-gray-200 text-sm text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors">
             + Agregar ejercicio
           </button>
