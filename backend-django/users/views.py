@@ -1,7 +1,7 @@
 import os
 
-import resend
 from django.conf import settings
+from django.core.mail import send_mail
 from django.utils.timezone import localtime
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -98,18 +98,18 @@ class ForgotPasswordView(APIView):
         frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:5173')
         reset_url = f'{frontend_url}/reset-password?token={reset_token.token}'
 
-        resend.api_key = settings.RESEND_API_KEY
-        resend.Emails.send({
-            'from': 'onboarding@resend.dev',
-            'to': [user.email],
-            'subject': 'Recuperar contraseña',
-            'html': f'''
+        send_mail(
+            subject='Recuperar contraseña - SR Power Gym',
+            message=f'Hola {user.first_name},\n\nRestablece tu contraseña aquí: {reset_url}\n\nEste enlace expira en 1 hora.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            html_message=f'''
                 <p>Hola {user.first_name},</p>
                 <p>Recibimos una solicitud para restablecer tu contraseña.</p>
                 <p><a href="{reset_url}" style="background:#000;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;">Restablecer contraseña</a></p>
                 <p>Este enlace expira en 1 hora. Si no solicitaste esto, ignora este mensaje.</p>
             ''',
-        })
+        )
 
         return Response({'message': 'Si el email existe, recibirás un enlace de recuperación.'})
 
