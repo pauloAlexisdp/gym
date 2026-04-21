@@ -52,28 +52,31 @@
 
         <div v-if="exercises.length === 0" class="text-center py-6 text-gray-400 text-sm shrink-0">Sin ejercicios. Agrega uno.</div>
 
-        <div v-else class="space-y-2 overflow-y-auto flex-1 pr-1 mb-3" @dragover.prevent @drop="onDrop">
-          <div
-            v-for="ex in exercises"
-            :key="ex.id"
-            class="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-3"
-            :class="dragOverId === ex.id ? 'ring-2 ring-black' : ''"
-            @dragenter.prevent="onDragEnter(ex)"
-          >
-            <div draggable="true" @dragstart="onDragStart(ex)" class="cursor-grab active:cursor-grabbing shrink-0 p-1 -m-1">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-              </svg>
+        <draggable
+          v-else
+          v-model="exercises"
+          item-key="id"
+          handle=".drag-handle"
+          class="space-y-2 overflow-y-auto flex-1 pr-1 mb-3"
+          @end="onReorder"
+        >
+          <template #item="{ element: ex }">
+            <div class="flex items-center gap-3 bg-gray-50 rounded-xl px-3 py-3">
+              <div class="drag-handle cursor-grab active:cursor-grabbing shrink-0 p-1 -m-1 touch-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0 cursor-pointer" @click="selectedExercise = ex">
+                <p class="text-sm font-medium text-gray-800 truncate">{{ ex.name }}</p>
+                <p class="text-xs text-gray-400">{{ ex.reps }} reps · {{ ex.weight ?? 0 }} kg</p>
+              </div>
+              <button @click="removeExercise(ex)" class="text-gray-300 hover:text-red-400 transition-colors shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
             </div>
-            <div class="flex-1 min-w-0 cursor-pointer" @click="selectedExercise = ex">
-              <p class="text-sm font-medium text-gray-800 truncate">{{ ex.name }}</p>
-              <p class="text-xs text-gray-400">{{ ex.reps }} reps · {{ ex.weight ?? 0 }} kg</p>
-            </div>
-            <button @click="removeExercise(ex)" class="text-gray-300 hover:text-red-400 transition-colors shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-          </div>
-        </div>
+          </template>
+        </draggable>
 
         <!-- Agregar ejercicio -->
         <div class="shrink-0">
@@ -177,6 +180,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import draggable from 'vuedraggable'
 import { useApi } from '@/composables/useApi'
 import type { Routine, RoutineExercise } from '@/views/RoutinesView.vue'
 import ExerciseHistoryChart from '@/components/exercises/ExerciseHistoryChart.vue'
@@ -196,8 +200,6 @@ const nameInput = ref(props.routine.name)
 const confirmDelete = ref(false)
 const showAddExercise = ref(false)
 const exerciseSearch = ref('')
-const dragItem = ref<RoutineExercise | null>(null)
-const dragOverId = ref<number | null>(null)
 
 const selectedExercise = ref<RoutineExercise | null>(null)
 const editing = ref(false)
@@ -311,22 +313,11 @@ async function deleteRoutine() {
   emit('deleted', props.routine.id)
 }
 
-function onDragStart(ex: RoutineExercise) { dragItem.value = ex }
-function onDragEnter(ex: RoutineExercise) { dragOverId.value = ex.id }
-
-async function onDrop() {
-  if (!dragItem.value || dragOverId.value === null) return
-  const from = exercises.value.findIndex(e => e.id === dragItem.value!.id)
-  const to = exercises.value.findIndex(e => e.id === dragOverId.value)
-  if (from === to) { dragItem.value = null; dragOverId.value = null; return }
-  const reordered = [...exercises.value]
-  const [item] = reordered.splice(from, 1)
-  if (item) reordered.splice(to, 0, item)
-  exercises.value = reordered.map((e, i) => ({ ...e, order: i }))
+async function onReorder() {
+  exercises.value = exercises.value.map((e, i) => ({ ...e, order: i }))
   await apiFetch(`${import.meta.env.VITE_API_URL}/api/exercises/routines/${props.routine.id}/reorder/`, {
     method: 'POST', body: JSON.stringify({ order: exercises.value.map(e => e.id) }),
   })
-  dragItem.value = null; dragOverId.value = null
   emitUpdated()
 }
 
