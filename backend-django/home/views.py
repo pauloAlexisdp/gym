@@ -17,6 +17,11 @@ class HomeConfigView(APIView):
             'about_title': config.about_title,
             'about_description': config.about_description,
             'activities_title': config.activities_title,
+            'schedule': config.schedule,
+            'map_embed_url': config.map_embed_url,
+            'facebook_url': config.facebook_url,
+            'instagram_url': config.instagram_url,
+            'whatsapp_url': config.whatsapp_url,
             'activities': [
                 {
                     'id': a.id,

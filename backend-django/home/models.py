@@ -7,6 +7,12 @@ class HomePageConfig(models.Model):
     about_description = models.TextField(default='')
     activities_title = models.CharField(max_length=200, default='Nuestras Actividades')
 
+    schedule = models.TextField(blank=True, default='')
+    map_embed_url = models.TextField(blank=True, default='')
+    facebook_url = models.URLField(blank=True, default='')
+    instagram_url = models.URLField(blank=True, default='')
+    whatsapp_url = models.URLField(blank=True, default='')
+
     class Meta:
         db_table = 'home_config'
         verbose_name = 'Configuración de inicio'
