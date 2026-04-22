@@ -8,8 +8,6 @@
       <ActivitiesSection :activities-title="config.activities_title" :activities="config.activities" />
     </main>
 
-    <FooterSection />
-
     <AuthModal v-if="showModal" @close="showModal = false" />
   </div>
 </template>
@@ -20,7 +18,6 @@ import GymNavbar from '@/components/common/NavbarSection.vue'
 import HeroSection from '@/components/home/HeroSection.vue'
 import AboutSection from '@/components/home/AboutSection.vue'
 import ActivitiesSection from '@/components/home/ActivitiesSection.vue'
-import FooterSection from '@/components/common/FooterSection.vue'
 import AuthModal from '@/components/auth/AuthModal.vue'
 
 interface Activity {
