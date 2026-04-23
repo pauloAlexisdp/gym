@@ -7,9 +7,6 @@ class HomePageConfig(models.Model):
     about_description = models.TextField(default='')
     activities_title = models.CharField(max_length=200, default='Nuestras Actividades')
 
-    background_color = models.CharField(max_length=20, blank=True, default='#f3f4f6')
-    background_image = models.ImageField(upload_to='backgrounds/', null=True, blank=True)
-
     map_embed_url = models.TextField(blank=True, default='')
     facebook_url = models.URLField(blank=True, default='')
     instagram_url = models.URLField(blank=True, default='')

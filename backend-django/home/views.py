@@ -22,8 +22,6 @@ class HomeConfigView(APIView):
                 {'title': s.title, 'hours': s.hours}
                 for s in schedules
             ],
-            'background_color': config.background_color,
-            'background_image': request.build_absolute_uri(config.background_image.url) if config.background_image else None,
             'map_embed_url': config.map_embed_url,
             'facebook_url': config.facebook_url,
             'instagram_url': config.instagram_url,

@@ -6,7 +6,6 @@ from .models import Activity, HomePageConfig, Schedule
 class HomePageConfigAdmin(admin.ModelAdmin):
     fields = (
         'hero_title', 'about_title', 'about_description', 'activities_title',
-        'background_color', 'background_image',
         'map_embed_url', 'facebook_url', 'instagram_url', 'whatsapp_url',
     )
 
