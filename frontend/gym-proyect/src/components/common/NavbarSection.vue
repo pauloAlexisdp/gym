@@ -13,12 +13,9 @@
       <button
         v-if="!auth.isLoggedIn"
         @click="$emit('open-modal')"
-        class="text-white hover:text-gray-300 transition-colors p-1 sm:p-2"
-        title="Iniciar sesión"
+        class="text-sm font-medium text-white hover:text-gray-300 transition-colors"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
+        Iniciar sesión
       </button>
 
       <div v-else class="flex items-center gap-3 sm:gap-4">
@@ -47,19 +44,34 @@
       </div>
     </div>
 
-    <div v-if="auth.isLoggedIn" class="border-t border-white/10">
+    <div class="border-t border-white/10">
       <div class="flex px-4 sm:px-6 lg:px-8">
-        <RouterLink
-          v-for="link in navLinks"
-          :key="link.to"
-          :to="link.to"
-          class="px-4 py-2.5 text-sm font-medium transition-colors border-b-2"
-          :class="isActive(link.to)
-            ? 'text-white border-white'
-            : 'text-gray-400 border-transparent hover:text-white'"
-        >
-          {{ link.label }}
-        </RouterLink>
+        <template v-if="auth.isLoggedIn">
+          <RouterLink
+            v-for="link in navLinks"
+            :key="link.to"
+            :to="link.to"
+            class="px-6 py-1.5 text-sm font-medium transition-colors border-b-2"
+            :class="isActive(link.to)
+              ? 'text-white border-white'
+              : 'text-white border-transparent hover:text-white'"
+          >
+            {{ link.label }}
+          </RouterLink>
+        </template>
+        <template v-else>
+          <RouterLink
+            v-for="link in publicLinks"
+            :key="link.to"
+            :to="link.to"
+            class="px-6 py-1.5 text-sm font-medium transition-colors border-b-2"
+            :class="isActive(link.to)
+              ? 'text-white border-white'
+              : 'text-white border-transparent hover:text-white'"
+          >
+            {{ link.label }}
+          </RouterLink>
+        </template>
       </div>
     </div>
   </nav>
@@ -77,7 +89,12 @@ const route = useRoute()
 
 const navLinks = [
   { to: '/inicio', label: 'Inicio' },
-  { to: '/rutinas', label: 'Rutinas' },
+  { to: '/ejercicios', label: 'Ejercicios' },
+  { to: '/planes', label: 'Planes' },
+  { to: '/contactenos', label: 'Contáctenos' },
+]
+
+const publicLinks = [
   { to: '/planes', label: 'Planes' },
   { to: '/contactenos', label: 'Contáctenos' },
 ]

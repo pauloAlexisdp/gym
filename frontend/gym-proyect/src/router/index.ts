@@ -13,7 +13,7 @@ const router = createRouter({
     {
       path: '/inicio',
       name: 'inicio',
-      component: () => import('../views/HomeUserView.vue'),
+      component: () => import('../views/RoutinesView.vue'),
       meta: { requiresAuth: true },
     },
     {
@@ -22,8 +22,12 @@ const router = createRouter({
     },
     {
       path: '/rutinas',
-      name: 'rutinas',
-      component: () => import('../views/RoutinesView.vue'),
+      redirect: '/inicio',
+    },
+    {
+      path: '/ejercicios',
+      name: 'ejercicios',
+      component: () => import('../views/HomeUserView.vue'),
       meta: { requiresAuth: true },
     },
     {
