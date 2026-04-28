@@ -34,7 +34,6 @@ const router = createRouter({
       path: '/planes',
       name: 'planes',
       component: () => import('../views/PlansView.vue'),
-      meta: { requiresAuth: true },
     },
     {
       path: '/contactenos',
