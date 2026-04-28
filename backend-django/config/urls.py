@@ -24,5 +24,6 @@ urlpatterns = [
     path('api/auth/', include('users.urls')),
     path('api/exercises/', include('exercises.urls')),
     path('api/home/', include('home.urls')),
+    path('api/plans/', include('plans.urls')),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
