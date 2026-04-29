@@ -16,6 +16,8 @@ class PlanListView(APIView):
                 'title': p.title,
                 'price': p.price,
                 'description': p.description,
+                'period': p.period,
+                'is_featured': p.is_featured,
                 'image': request.build_absolute_uri(p.image.url) if p.image else None,
             }
             for p in plans
