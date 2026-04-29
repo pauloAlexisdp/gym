@@ -20,6 +20,7 @@ class UserExerciseAdmin(admin.ModelAdmin):
     list_display = ('user', 'exercise', 'reps', 'weight')
     list_filter = ('exercise',)
     search_fields = ('user__email', 'exercise__name')
+    actions = ['delete_selected']
 
 
 @admin.register(UserExerciseHistory)
