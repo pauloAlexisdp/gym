@@ -12,8 +12,8 @@
         <h1 class="text-white text-lg sm:text-xl font-bold">SR Power Gym</h1>
       </div>
 
-      <!-- Links + acciones -->
-      <div class="flex items-center gap-1 sm:gap-2">
+      <!-- Links desktop -->
+      <div class="hidden sm:flex items-center gap-1 sm:gap-2">
         <template v-if="auth.isLoggedIn">
           <RouterLink
             v-for="link in navLinks"
@@ -24,7 +24,6 @@
           >
             {{ link.label }}
           </RouterLink>
-
           <div class="flex items-center gap-2 ml-3 pl-3 border-l border-white/20">
             <button @click="router.push('/profile')" class="shrink-0" title="Mi perfil">
               <img
@@ -33,10 +32,7 @@
                 alt="Perfil"
                 class="h-8 w-8 rounded-full object-cover ring-2 ring-white/30 hover:ring-white transition-all"
               />
-              <div
-                v-else
-                class="h-8 w-8 rounded-full bg-gray-600 hover:bg-gray-500 flex items-center justify-center ring-2 ring-white/30 hover:ring-white transition-all"
-              >
+              <div v-else class="h-8 w-8 rounded-full bg-gray-600 hover:bg-gray-500 flex items-center justify-center ring-2 ring-white/30 hover:ring-white transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
@@ -49,7 +45,6 @@
             </button>
           </div>
         </template>
-
         <template v-else>
           <RouterLink
             v-for="link in publicLinks"
@@ -60,21 +55,70 @@
           >
             {{ link.label }}
           </RouterLink>
-
-          <button
-            @click="$emit('open-modal')"
-            class="ml-3 text-sm font-medium text-white/70 hover:text-white transition-colors"
-          >
+          <button @click="$emit('open-modal')" class="ml-3 text-sm font-medium text-white/70 hover:text-white transition-colors">
             Iniciar sesión
           </button>
         </template>
       </div>
 
+      <!-- Hamburguesa móvil -->
+      <button class="sm:hidden text-white p-2" @click="menuOpen = !menuOpen">
+        <svg v-if="!menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Menú móvil desplegable -->
+    <div v-if="menuOpen" class="sm:hidden bg-black border-t border-white/10 px-4 pb-4 flex flex-col gap-1">
+      <template v-if="auth.isLoggedIn">
+        <RouterLink
+          v-for="link in navLinks"
+          :key="link.to"
+          :to="link.to"
+          @click="menuOpen = false"
+          class="py-2.5 text-sm font-medium border-b border-white/10 transition-colors"
+          :class="isActive(link.to) ? 'text-white' : 'text-white/70'"
+        >
+          {{ link.label }}
+        </RouterLink>
+        <div class="flex items-center justify-between pt-3">
+          <button @click="router.push('/profile'); menuOpen = false" class="flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors">
+            <img v-if="auth.user?.profile_picture" :src="auth.user.profile_picture" alt="Perfil" class="h-7 w-7 rounded-full object-cover" />
+            <div v-else class="h-7 w-7 rounded-full bg-gray-600 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            Mi perfil
+          </button>
+          <button @click="handleLogout" class="text-sm text-red-400 hover:text-red-300 transition-colors">Cerrar sesión</button>
+        </div>
+      </template>
+      <template v-else>
+        <RouterLink
+          v-for="link in publicLinks"
+          :key="link.to"
+          :to="link.to"
+          @click="menuOpen = false"
+          class="py-2.5 text-sm font-medium border-b border-white/10 transition-colors"
+          :class="isActive(link.to) ? 'text-white' : 'text-white/70'"
+        >
+          {{ link.label }}
+        </RouterLink>
+        <button @click="$emit('open-modal'); menuOpen = false" class="mt-2 text-sm font-medium text-white/70 hover:text-white transition-colors text-left">
+          Iniciar sesión
+        </button>
+      </template>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.store'
 
@@ -83,6 +127,7 @@ defineEmits<{ 'open-modal': [] }>()
 const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
+const menuOpen = ref(false)
 
 const navLinks = [
   { to: '/inicio', label: 'Inicio' },

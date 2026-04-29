@@ -34,7 +34,7 @@
 
           <div class="p-5 flex flex-col gap-2">
             <h3 class="text-lg font-bold text-gray-800 uppercase tracking-wide">{{ plan.title }}</h3>
-            <p class="text-2xl font-bold text-black">{{ plan.price }}</p>
+            <p class="text-lg font-semibold text-gray-700">${{ plan.price }}</p>
             <p v-if="plan.description" class="text-sm text-gray-500 leading-relaxed">{{ plan.description }}</p>
           </div>
         </div>
