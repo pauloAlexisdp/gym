@@ -1,9 +1,10 @@
 <template>
   <div class="flex-1 min-h-0 flex flex-col bg-gray-100">
-    <NavbarSection />
+    <NavbarSection @open-modal="showModal = true" />
+    <AuthModal v-if="showModal" @close="showModal = false" />
 
     <main class="flex-1 px-4 py-10 sm:px-8 max-w-5xl mx-auto w-full">
-      <h2 class="text-2xl font-bold text-gray-800 mb-8">Planes</h2>
+      <h2 class="text-4xl font-extrabold text-gray-900 mb-8 tracking-tight">Planes</h2>
 
       <div v-if="loading" class="text-center py-16 text-gray-400">Cargando...</div>
 
@@ -17,7 +18,7 @@
           :key="plan.id"
           class="bg-white rounded-2xl shadow overflow-hidden cursor-default transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
         >
-          <div class="h-48 bg-gray-200 overflow-hidden">
+          <div class="h-64 bg-gray-200 overflow-hidden">
             <img
               v-if="plan.image"
               :src="plan.image"
@@ -45,6 +46,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import NavbarSection from '@/components/common/NavbarSection.vue'
+import AuthModal from '@/components/auth/AuthModal.vue'
+
+const showModal = ref(false)
 
 interface Plan {
   id: number
