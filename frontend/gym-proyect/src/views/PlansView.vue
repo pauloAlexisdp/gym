@@ -1,10 +1,10 @@
 <template>
-  <div class="flex-1 min-h-0 flex flex-col bg-gray-900">
+  <div class="flex-1 min-h-0 flex flex-col bg-gray-100">
     <NavbarSection @open-modal="showModal = true" />
     <AuthModal v-if="showModal" @close="showModal = false" />
 
     <main class="flex-1 px-4 py-10 sm:px-8 max-w-5xl mx-auto w-full">
-      <h2 class="text-4xl font-extrabold text-white mb-8 tracking-tight">Planes</h2>
+      <h2 class="text-4xl font-extrabold text-gray-900 mb-8 tracking-tight">Planes</h2>
 
       <div v-if="loading" class="text-center py-16 text-gray-400">Cargando...</div>
 
@@ -16,35 +16,26 @@
         <div
           v-for="plan in plans"
           :key="plan.id"
-          class="rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-1"
-          :class="plan.is_featured
-            ? 'ring-2 ring-green-500 shadow-[0_0_20px_rgba(34,197,94,0.25)]'
-            : 'ring-1 ring-white/10 hover:ring-white/20'"
+          class="bg-white rounded-2xl shadow overflow-hidden cursor-default transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
         >
-          <!-- Imagen -->
-          <div class="h-56 bg-black overflow-hidden">
+          <div class="h-64 bg-gray-200 overflow-hidden">
             <img
               v-if="plan.image"
               :src="plan.image"
               :alt="plan.title"
               class="w-full h-full object-cover"
             />
+            <div v-else class="w-full h-full flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
           </div>
 
-          <!-- Info -->
-          <div class="bg-white p-5 flex flex-col gap-1">
-            <span
-              v-if="plan.is_featured"
-              class="self-start mb-1 text-xs font-bold uppercase tracking-wide bg-green-500 text-white px-3 py-1 rounded-full"
-            >
-              Más popular
-            </span>
-            <h3 class="text-sm font-bold uppercase tracking-wide text-gray-900">{{ plan.title }}</h3>
-            <div class="flex items-baseline gap-1">
-              <p class="text-3xl font-bold text-gray-900">${{ plan.price }}</p>
-              <span v-if="plan.period" class="text-sm text-gray-400">{{ plan.period }}</span>
-            </div>
-            <p v-if="plan.description" class="text-sm text-gray-500 mt-1">{{ plan.description }}</p>
+          <div class="p-5 flex flex-col gap-2">
+            <h3 class="text-lg font-bold text-gray-800 uppercase tracking-wide">{{ plan.title }}</h3>
+            <p class="text-lg font-semibold text-gray-700">${{ plan.price }}</p>
+            <p v-if="plan.description" class="text-sm text-gray-500 leading-relaxed">{{ plan.description }}</p>
           </div>
         </div>
       </div>
@@ -64,8 +55,6 @@ interface Plan {
   title: string
   price: string
   description: string
-  period: string
-  is_featured: boolean
   image: string | null
 }
 

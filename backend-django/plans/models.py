@@ -6,8 +6,6 @@ class Plan(models.Model):
     price = models.CharField(max_length=50, help_text='Ej: $55.900')
     image = models.ImageField(upload_to='plans/', null=True, blank=True)
     description = models.TextField(blank=True, default='', help_text='Descripción opcional del plan')
-    period = models.CharField(max_length=50, blank=True, default='', help_text='Ej: / mes, / día')
-    is_featured = models.BooleanField(default=False, help_text='Mostrar badge "Más Popular"')
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
 
