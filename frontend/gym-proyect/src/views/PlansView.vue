@@ -16,10 +16,7 @@
         <div
           v-for="plan in plans"
           :key="plan.id"
-          class="rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-1"
-          :class="plan.is_featured
-            ? 'ring-2 ring-green-500 shadow-lg'
-            : 'ring-1 ring-gray-200 shadow hover:shadow-md'"
+          class="rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-1 flex flex-col ring-1 ring-gray-200 shadow hover:ring-2 hover:ring-[#1DB954] hover:shadow-md"
         >
           <!-- Imagen -->
           <div class="h-56 bg-gray-900 overflow-hidden">
@@ -32,10 +29,10 @@
           </div>
 
           <!-- Info -->
-          <div class="bg-white p-5 flex flex-col gap-1">
+          <div class="bg-white p-5 flex flex-col gap-1 flex-1">
             <span
               v-if="plan.is_featured"
-              class="self-start mb-2 text-xs font-bold uppercase tracking-wide bg-green-500 text-white px-3 py-1 rounded-full"
+              class="self-start mb-2 text-[10px] font-bold uppercase tracking-wide bg-[#1DB954] text-white px-2.5 py-0.5 rounded-full"
             >
               Más popular
             </span>

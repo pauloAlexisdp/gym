@@ -80,8 +80,8 @@
           :key="link.to"
           :to="link.to"
           @click="menuOpen = false"
-          class="py-2.5 text-sm font-medium border-b border-white/10 transition-colors"
-          :class="isActive(link.to) ? 'text-white' : 'text-white/70'"
+          class="py-2.5 text-sm font-medium border-b border-white/10 transition-colors pl-3 border-l-2"
+          :class="isActive(link.to) ? 'text-white border-l-white' : 'text-white/70 border-l-transparent'"
         >
           {{ link.label }}
         </RouterLink>
@@ -104,8 +104,8 @@
           :key="link.to"
           :to="link.to"
           @click="menuOpen = false"
-          class="py-2.5 text-sm font-medium border-b border-white/10 transition-colors"
-          :class="isActive(link.to) ? 'text-white' : 'text-white/70'"
+          class="py-2.5 text-sm font-medium border-b border-white/10 transition-colors pl-3 border-l-2"
+          :class="isActive(link.to) ? 'text-white border-l-white' : 'text-white/70 border-l-transparent'"
         >
           {{ link.label }}
         </RouterLink>
